@@ -14,24 +14,24 @@ This application was made as an assesment and it facilitates a chatbot by levera
 ## Technologies Used
 
 ### Frontend
-- **React**: A JavaScript library for building user interfaces.
-- **Next.js**: A React framework for server-side rendering and building static websites.
-- **TypeScript**: A typed superset of JavaScript that compiles to plain JavaScript.
-- **Zod**: A TypeScript-first schema declaration and validation library.
-- **React Hook Form**: A library for managing form state and validation in React.
-- **Axios**: A promise-based HTTP client for the browser and Node.js.
+- React: A JavaScript library for building user interfaces.
+- Next.js: A React framework for server-side rendering and building static websites.
+- TypeScript: A typed superset of JavaScript that compiles to plain JavaScript.
+- Zod: A TypeScript-first schema declaration and validation library.
+- React Hook Form: A library for managing form state and validation in React.
+- Axios: A promise-based HTTP client for the browser and Node.js.
 - **Tailwind CSS**: A utility-first CSS framework for rapid UI development.
 
 ### Backend
-- **FastAPI**: A modern, fast (high-performance), web framework for building APIs with Python.
-- **LangChain**: A framework for developing applications powered by language models.
-- **OpenAI API**: An API for accessing OpenAI's GPT-3 and GPT-4 models.
-- **Replicate API**: An API for running machine learning models from different providers.
-- **BeautifulSoup**: A Python library for web scraping purposes to pull the data out of HTML and XML files.
+- FastAPI: A modern, fast (high-performance), web framework for building APIs with Python.
+- LangChain: A framework for developing applications powered by language models.
+- OpenAI API: An API for accessing OpenAI's GPT-3 and GPT-4 models.
+- Replicate API: An API for running machine learning models from different providers.
+- BeautifulSoup: A Python library for web scraping purposes to pull the data out of HTML and XML files.
 
 ### Other Tools
-- **SSE (Server-Sent Events)**: A server push technology enabling a client to receive automatic updates from a server via HTTP connection.
-- **dotenv**: A zero-dependency module that loads environment variables from a `.env` file into `process.env`.
+- SSE (Server-Sent Events): A server push technology enabling a client to receive automatic updates from a server via HTTP connection.
+- dotenv: A zero-dependency module that loads environment variables from a `.env` file into `process.env`.
 
 ## Getting Started
 
@@ -73,22 +73,22 @@ This application was made as an assesment and it facilitates a chatbot by levera
 
 ## Usage
 
-1. **Access the application**
+1. Access the application
     Open your browser and navigate to `http://localhost:3000` to access the frontend interface.
 
-2. **Scrape a URL**
+2. Scrape a URL
     Enter a URL in the provided input field and click "Scrape URL" to process the URL.
 
-3. **Chat Interaction**
+3. Chat Interaction
     Type your message in the input field and click "Send Message" to start the conversation. The chatbot will provide responses based on the contextual information obtained from the scraped URL.
 
 ## API Endpoints
 
 ### Scrape URL
-- **Endpoint**: `/api/scrape`
-- **Method**: POST
-- **Description**: Processes the provided URL and extracts contextual information for the chatbot using BeautifulSoup for web scraping.
-- **Request Body**:
+- Endpoint: `/api/scrape`
+- Method: POST
+- Description: Processes the provided URL and extracts contextual information for the chatbot using BeautifulSoup for web scraping.
+- Request Body:
     ```json
     {
         "url": "https://example.com"
@@ -96,13 +96,18 @@ This application was made as an assesment and it facilitates a chatbot by levera
     ```
 
 ### Chat Stream
-- **Endpoint**: `/api/chat/stream`
-- **Method**: GET
-- **Description**: Streams chat responses using Server-Sent Events (SSE).
-- **Query Parameter**:
+- Endpoint: `/api/chat/stream`
+- Method: GET
+- Description: Streams chat responses using Server-Sent Events (SSE).
+- Query Parameter:
     - `message`: The user message to start the conversation.
     
     Example: `/api/chat/stream?message=Hello`
+
+###Pictures from application
+![image](https://github.com/Farahzalsaf/Farahs-PwC-Assesment/assets/74122145/fae1302a-ccdf-40ae-ad46-2eeea0f963ad)
+![image](https://github.com/Farahzalsaf/Farahs-PwC-Assesment/assets/74122145/b2bbd589-f7ab-4640-8423-69faec00a46e)
+
 
 ```
 
