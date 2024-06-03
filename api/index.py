@@ -17,6 +17,7 @@ from openai import OpenAI
 from sse_starlette.sse import EventSourceResponse
 import json
 import replicate
+import asyncio
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -29,10 +30,10 @@ load_dotenv()
 api_key = os.getenv("OPENAI_API_KEY")
 replicate_api_key = os.getenv("REPLICATE_API_TOKEN")
 
-if api_key and replicate_api_key :
-    logger.info(f"OpenAI API and Replicate Api Key loaded")
+if api_key and replicate_api_key:
+    logger.info("OpenAI API and Replicate API Key loaded")
 else:
-    logger.error("OpenAI API key or Replicate Api Key not found")
+    logger.error("OpenAI API key or Replicate API Key not found")
 
 openAIClient = OpenAI(api_key=api_key)
 replicateClient = replicate.Client(api_token=replicate_api_key)
@@ -48,12 +49,6 @@ class UrlModel(BaseModel):
 
 @app.post("/api/scrape")
 async def get_vectorstore_from_url(item: UrlModel):
-    """
-        Request Example:
-        {
-            "url": "https://www.example.com"
-        }
-    """
     url = item.url
     global vector_store
     logger.info(f"Received request to scrape URL: {url}")
@@ -68,16 +63,16 @@ async def get_vectorstore_from_url(item: UrlModel):
             raise ValueError("OpenAI API key not found")
 
         max_retries = 5
-        retry_delay = 2  # initial delay in seconds
+        retry_delay = 2
         for attempt in range(max_retries):
             try:
                 vector_store = Chroma.from_documents(document_chunks, OpenAIEmbeddings(openai_api_key=api_key))
                 logger.info("Vector store initialized")
                 return {"message": "Vector store initialized"}
-            except OpenAI.RateLimitError as e:
+            except OpenAI.RateLimitError:
                 logger.warning(f"Rate limit exceeded. Retrying in {retry_delay} seconds... (Attempt {attempt + 1}/{max_retries})")
                 time.sleep(retry_delay)
-                retry_delay *= 2  # Exponential backoff
+                retry_delay *= 2
             except OpenAI.OpenAIError as e:
                 if e.http_status == 429:
                     logger.error(f"Quota exceeded: {e}")
@@ -105,7 +100,6 @@ async def chat(request: ChatRequest):
         context = retriever_chain.invoke({"input": request.message, "chat_history": chat_history})
         logger.info(f"Context: {context}")
 
-        # Assuming context is a list of documents
         context_text = " ".join(doc.page_content for doc in context)
 
         logger.info(f"User message: {user_message.content}")
@@ -113,14 +107,13 @@ async def chat(request: ChatRequest):
 
         responses = {}
 
-        # Call OpenAI models
         models_openai = ["gpt-3.5-turbo", "gpt-4"]
         for model in models_openai:
             response = call_openai_model(model, request.message)
             responses[model] = response
             logger.info(f"Response from {model}: {response}")
 
-        models_replicate = ["meta/llama-2-70b-chat","joehoover/falcon-40b-instruct"]
+        models_replicate = ["meta/llama-2-70b-chat", "joehoover/falcon-40b-instruct"]
         for model in models_replicate:
             response = call_replicate_model(model, request.message)
             responses[model] = response
@@ -153,7 +146,6 @@ async def chat_stream(request: Request):
     context = retriever_chain.invoke({"input": message, "chat_history": chat_history})
     logger.info(f"Context: {context}")
 
-    # Assuming context is a list of documents
     context_text = " ".join(doc.page_content for doc in context)
 
     async def event_generator():
@@ -168,7 +160,7 @@ async def chat_stream(request: Request):
                 responses[model] = response
                 logger.info(f"Response from {model}: {response}")
 
-            models_replicate = ["meta/llama-2-70b-chat","joehoover/falcon-40b-instruct"]
+            models_replicate = ["meta/llama-2-70b-chat", "joehoover/falcon-40b-instruct"]
             for model in models_replicate:
                 response = call_replicate_model(model, message)
                 responses[model] = response
@@ -182,6 +174,8 @@ async def chat_stream(request: Request):
             chat_history.append(ai_message)
 
             yield {"data": json.dumps({"role": "bot", "content": best_response, "model": best_model})}
+            await asyncio.sleep(3)  # Delay to keep the connection alive for 3 seconds
+            yield {"event": "close", "data": "[CLOSE]"}  # Signal to close the connection
         except Exception as e:
             logger.error(f"Error in chat_stream: {e}", exc_info=True)
             yield {"data": json.dumps({"error": str(e)})}
@@ -201,7 +195,7 @@ def call_openai_model(model: str, message: str) -> str:
 def call_replicate_model(model: str, prompt: str) -> str:
     try:
         logger.info(f"Calling Replicate model: {model}")
-        if model == "joehoover/falcon-40b-instruct": 
+        if model == "joehoover/falcon-40b-instruct":
             output = replicateClient.run(
                 "joehoover/falcon-40b-instruct:7d58d6bddc53c23fa451c403b2b5373b1e0fa094e4e0d1b98c3d02931aa07173",
                 input={"prompt": prompt}
@@ -222,9 +216,7 @@ def call_replicate_model(model: str, prompt: str) -> str:
         logger.error(f"Error calling Replicate model: {e}")
         return ""
 
-
 def evaluate_response_accuracy(response: str, context: str) -> int:
-    # Simple heuristic to evaluate response accuracy based on context
     score = 0
     for word in context.split():
         if word.lower() in response.lower():
@@ -232,15 +224,12 @@ def evaluate_response_accuracy(response: str, context: str) -> int:
     return score
 
 def get_best_response(responses: Dict[str, str], context: str) -> Tuple[str, str]:
-    # Evaluate the accuracy of each response based on the context and select the best one
     best_model = max(responses, key=lambda model: evaluate_response_accuracy(responses[model], context))
     return best_model, responses[best_model]
-
 
 def get_context_retriever_chain(vector_store):
     logger.info("Creating context retriever chain")
     llm = ChatOpenAI()
-
     retriever = vector_store.as_retriever()
 
     prompt = ChatPromptTemplate.from_messages(
@@ -255,7 +244,6 @@ def get_context_retriever_chain(vector_store):
     )
 
     retriever_chain = create_history_aware_retriever(llm, retriever, prompt)
-
     return retriever_chain
 
 def get_conversational_rag_chain(retriever_chain):
@@ -273,11 +261,8 @@ def get_conversational_rag_chain(retriever_chain):
     )
 
     stuff_documents_chain = create_stuff_documents_chain(llm, prompt)
-
     return create_retrieval_chain(retriever_chain, stuff_documents_chain)
 
 if __name__ == "__main__":
     import uvicorn
-
     uvicorn.run(app, host="0.0.0.0", port=8000)
-
