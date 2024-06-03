@@ -13,6 +13,7 @@ import { Loader } from "@/components/loader";
 interface Message {
   role: "user" | "bot";
   content: string;
+  model?: string; // Include model name
 }
 
 const ConversationPage = () => {
@@ -75,7 +76,7 @@ const ConversationPage = () => {
         if (parsedData.role === "bot" && parsedData.content) {
           setMessages((prevMessages) => [
             ...prevMessages,
-            { role: "bot", content: parsedData.content },
+            { role: "bot", content: parsedData.content, model: parsedData.model },
           ]);
         }
       };
