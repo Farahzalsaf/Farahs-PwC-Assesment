@@ -20,7 +20,7 @@ Technologies Used
 - Zod: A TypeScript-first schema declaration and validation library.
 - React Hook Form: A library for managing form state and validation in React.
 - Axios: A promise-based HTTP client for the browser and Node.js.
-- **Tailwind CSS**: A utility-first CSS framework for rapid UI development.
+- Tailwind CSS: A utility-first CSS framework for rapid UI development.
 
  Backend
 - FastAPI: A modern, fast (high-performance), web framework for building APIs with Python.
