@@ -1,9 +1,9 @@
 ```markdown
-# ✨Large Language Model Evaluation App!✨
+✨Large Language Model Evaluation App!✨
 
 This application was made as an assesment and it facilitates a chatbot by leveraging Next.js as the frontend and FastAPI as the backend, utilizing the power of LangChain for dynamic web interactions. It incorporates BeautifulSoup for web scraping to extract contextual information from provided URLs.
 
-## Table of Contents
+ Table of Contents
 
 - [Technologies Used](#technologies-used)
 - [Project Structure](#project-structure)
@@ -11,9 +11,9 @@ This application was made as an assesment and it facilitates a chatbot by levera
 - [Usage](#usage)
 - [API Endpoints](#api-endpoints)
 
-## Technologies Used
+Technologies Used
 
-### Frontend
+ Frontend
 - React: A JavaScript library for building user interfaces.
 - Next.js: A React framework for server-side rendering and building static websites.
 - TypeScript: A typed superset of JavaScript that compiles to plain JavaScript.
@@ -22,25 +22,25 @@ This application was made as an assesment and it facilitates a chatbot by levera
 - Axios: A promise-based HTTP client for the browser and Node.js.
 - **Tailwind CSS**: A utility-first CSS framework for rapid UI development.
 
-### Backend
+ Backend
 - FastAPI: A modern, fast (high-performance), web framework for building APIs with Python.
 - LangChain: A framework for developing applications powered by language models.
 - OpenAI API: An API for accessing OpenAI's GPT-3 and GPT-4 models.
 - Replicate API: An API for running machine learning models from different providers.
 - BeautifulSoup: A Python library for web scraping purposes to pull the data out of HTML and XML files.
 
-### Other Tools
+ Other Tools
 - SSE (Server-Sent Events): A server push technology enabling a client to receive automatic updates from a server via HTTP connection.
 - dotenv: A zero-dependency module that loads environment variables from a `.env` file into `process.env`.
 
-## Getting Started
+ Getting Started
 
-### Prerequisites
+ Prerequisites
 
 - Node.js and npm (Node Package Manager)
 - Python 3.7+
 
-### Setup
+ Setup
 
 1. **Clone the repository**
     ```sh
@@ -64,14 +64,14 @@ This application was made as an assesment and it facilitates a chatbot by levera
     uvicorn main:app --reload
     ```
 
-4. **Environment Variables**
+4. Environment Variables
     Create a `.env` file in the root directory and configure the following environment variables:
     ```
     OPENAI_API_KEY=your_openai_api_key
     REPLICATE_API_TOKEN=your_replicate_api_token
     ```
 
-## Usage
+ Usage
 
 1. Access the application
     Open your browser and navigate to `http://localhost:3000` to access the frontend interface.
@@ -82,9 +82,9 @@ This application was made as an assesment and it facilitates a chatbot by levera
 3. Chat Interaction
     Type your message in the input field and click "Send Message" to start the conversation. The chatbot will provide responses based on the contextual information obtained from the scraped URL.
 
-## API Endpoints
+ API Endpoints
 
-### Scrape URL
+ Scrape URL
 - Endpoint: `/api/scrape`
 - Method: POST
 - Description: Processes the provided URL and extracts contextual information for the chatbot using BeautifulSoup for web scraping.
@@ -95,7 +95,7 @@ This application was made as an assesment and it facilitates a chatbot by levera
     }
     ```
 
-### Chat Stream
+ Chat Stream
 - Endpoint: `/api/chat/stream`
 - Method: GET
 - Description: Streams chat responses using Server-Sent Events (SSE).
@@ -105,8 +105,10 @@ This application was made as an assesment and it facilitates a chatbot by levera
     Example: `/api/chat/stream?message=Hello`
 
 ###Pictures from application
-![image](https://github.com/Farahzalsaf/Farahs-PwC-Assesment/assets/74122145/fae1302a-ccdf-40ae-ad46-2eeea0f963ad)
-![image](https://github.com/Farahzalsaf/Farahs-PwC-Assesment/assets/74122145/b2bbd589-f7ab-4640-8423-69faec00a46e)
+
+<img width="1252" alt="image" src="https://github.com/Farahzalsaf/Farahs-PwC-Assesment/assets/74122145/40ee3274-8f54-4148-bfc7-d4efce99fc50">
+
+<img width="496" alt="image2" src="https://github.com/Farahzalsaf/Farahs-PwC-Assesment/assets/74122145/4a3af7fe-2b69-47b4-99ed-7798349bb524">
 
 
 ```
