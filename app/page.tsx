@@ -177,7 +177,7 @@ const ConversationPage = () => {
                     : "bg-muted"
                 }`}
               >
-                <p>{message.role === "user" ? "User" : "Bot"}:</p>
+                <p>{message.role === "user" ? "User" : `Bot (Model: ${message.model})`}:</p>
                 <p className="text-sm">{message.content}</p>
               </div>
             ))}
