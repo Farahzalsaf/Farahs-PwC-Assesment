@@ -17,6 +17,7 @@ from openai import OpenAI
 from sse_starlette.sse import EventSourceResponse
 import json
 import replicate
+import concurrent.futures
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -29,7 +30,7 @@ load_dotenv()
 api_key = os.getenv("OPENAI_API_KEY")
 replicate_api_key = os.getenv("REPLICATE_API_TOKEN")
 
-if api_key and replicate_api_key :
+if api_key and replicate_api_key:
     logger.info(f"OpenAI API and Replicate Api Key loaded")
 else:
     logger.error("OpenAI API key or Replicate Api Key not found")
@@ -120,11 +121,18 @@ async def chat(request: ChatRequest):
             responses[model] = response
             logger.info(f"Response from {model}: {response}")
 
-        models_replicate = ["meta/llama-2-70b-chat","joehoover/falcon-40b-instruct"]
+        # Call Replicate models except Falcon
+        models_replicate = ["meta/llama-2-70b-chat"]
         for model in models_replicate:
             response = call_replicate_model(model, request.message)
             responses[model] = response
             logger.info(f"Response from {model}: {response}")
+
+        # Call Falcon model with timeout handling
+        falcon_response = call_falcon_model(request.message)
+        if falcon_response:
+            responses["joehoover/falcon-40b-instruct"] = falcon_response
+            logger.info(f"Response from Falcon: {falcon_response}")
 
         best_model, best_response = get_best_response(responses, context_text)
         logger.info(f"Best response from {best_model}: {best_response}")
@@ -168,11 +176,16 @@ async def chat_stream(request: Request):
                 responses[model] = response
                 logger.info(f"Response from {model}: {response}")
 
-            models_replicate = ["meta/llama-2-70b-chat","joehoover/falcon-40b-instruct"]
+            models_replicate = ["meta/llama-2-70b-chat"]
             for model in models_replicate:
                 response = call_replicate_model(model, message)
                 responses[model] = response
                 logger.info(f"Response from {model}: {response}")
+
+            falcon_response = call_falcon_model(message)
+            if falcon_response:
+                responses["joehoover/falcon-40b-instruct"] = falcon_response
+                logger.info(f"Response from Falcon: {falcon_response}")
 
             best_model, best_response = get_best_response(responses, context_text)
             logger.info(f"Best response from {best_model}: {best_response}")
@@ -201,27 +214,28 @@ def call_openai_model(model: str, message: str) -> str:
 def call_replicate_model(model: str, prompt: str) -> str:
     try:
         logger.info(f"Calling Replicate model: {model}")
-        if model == "joehoover/falcon-40b-instruct": 
-            output = replicateClient.run(
-                "joehoover/falcon-40b-instruct:7d58d6bddc53c23fa451c403b2b5373b1e0fa094e4e0d1b98c3d02931aa07173",
-                input={"prompt": prompt}
-            )
-            result = "".join([event for event in output])
-            return result
-
-        elif model == "meta/llama-2-70b-chat":
-            output = replicateClient.run(
-                "meta/llama-2-70b-chat:02e509c789964a7ea8736978a43525956ef40397be9033abf9fd2badfe68c9e3",
-                input={"prompt": prompt}
-            )
-            result = "".join([event for event in output])
-            return result
-        logger.error(f"Model {model} not found")
-        return "Error !!!!"
+        output = replicateClient.run(
+            model,
+            input={"prompt": prompt}
+        )
+        result = "".join([event for event in output])
+        return result
     except Exception as e:
         logger.error(f"Error calling Replicate model: {e}")
         return ""
 
+def call_falcon_model(prompt: str) -> str:
+    try:
+        logger.info(f"Calling Falcon model")
+        output = replicateClient.run(
+            "joehoover/falcon-40b-instruct:7d58d6bddc53c23fa451c403b2b5373b1e0fa094e4e0d1b98c3d02931aa07173",
+            input={"prompt": prompt}
+        )
+        result = "".join([event for event in output])
+        return result
+    except Exception as e:
+        logger.error(f"Error calling Falcon model: {e}")
+        return ""
 
 def evaluate_response_accuracy(response: str, context: str) -> int:
     # Simple heuristic to evaluate response accuracy based on context
@@ -235,7 +249,6 @@ def get_best_response(responses: Dict[str, str], context: str) -> Tuple[str, str
     # Evaluate the accuracy of each response based on the context and select the best one
     best_model = max(responses, key=lambda model: evaluate_response_accuracy(responses[model], context))
     return best_model, responses[best_model]
-
 
 def get_context_retriever_chain(vector_store):
     logger.info("Creating context retriever chain")
@@ -279,5 +292,4 @@ def get_conversational_rag_chain(retriever_chain):
 if __name__ == "__main__":
     import uvicorn
 
-    uvicorn.run(app, host="0.0.0.0", port=8000)
-
+    uvicorn.run(app, host="192.168.8.101", port=8000)
