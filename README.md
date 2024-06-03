@@ -104,14 +104,14 @@ Technologies Used
     
     Example: `/api/chat/stream?message=Hello`
 
-###Pictures from application
-
-<img width="1252" alt="image" src="https://github.com/Farahzalsaf/Farahs-PwC-Assesment/assets/74122145/40ee3274-8f54-4148-bfc7-d4efce99fc50">
-
-<img width="496" alt="image2" src="https://github.com/Farahzalsaf/Farahs-PwC-Assesment/assets/74122145/4a3af7fe-2b69-47b4-99ed-7798349bb524">
-
-
+Pictures from application
 ```
+<p align="center">
+  <img width="1252" alt="image" src="https://github.com/Farahzalsaf/Farahs-PwC-Assesment/assets/74122145/40ee3274-8f54-4148-bfc7-d4efce99fc50">
+
+  <img width="496" alt="image2" src="https://github.com/Farahzalsaf/Farahs-PwC-Assesment/assets/74122145/4a3af7fe-2b69-47b4-99ed-7798349bb524">
+
+</p>
 
 ### Summary
 
