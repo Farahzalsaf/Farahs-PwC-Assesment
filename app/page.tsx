@@ -108,7 +108,7 @@ const ConversationPage = () => {
   return (
     <div>
       <Heading
-        title="Interactive Chatbot"
+        title="Large Language Model Evaluation App!"
         description="Engage in a conversation. Provide a URL for contextual responses."
       />
 
