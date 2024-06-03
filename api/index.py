@@ -175,17 +175,20 @@ async def chat_stream(request: Request):
                 response = call_openai_model(model, message)
                 responses[model] = response
                 logger.info(f"Response from {model}: {response}")
+                yield {"data": json.dumps({"role": "bot", "content": response, "model": model})}
 
             models_replicate = ["meta/llama-2-70b-chat"]
             for model in models_replicate:
                 response = call_replicate_model(model, message)
                 responses[model] = response
                 logger.info(f"Response from {model}: {response}")
+                yield {"data": json.dumps({"role": "bot", "content": response, "model": model})}
 
             falcon_response = call_falcon_model(message)
             if falcon_response:
                 responses["joehoover/falcon-40b-instruct"] = falcon_response
                 logger.info(f"Response from Falcon: {falcon_response}")
+                yield {"data": json.dumps({"role": "bot", "content": falcon_response, "model": "joehoover/falcon-40b-instruct"})}
 
             best_model, best_response = get_best_response(responses, context_text)
             logger.info(f"Best response from {best_model}: {best_response}")
@@ -200,6 +203,7 @@ async def chat_stream(request: Request):
             yield {"data": json.dumps({"error": str(e)})}
 
     return EventSourceResponse(event_generator())
+
 
 def call_openai_model(model: str, message: str) -> str:
     response = openAIClient.chat.completions.create(

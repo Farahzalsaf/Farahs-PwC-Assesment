@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import * as z from "zod";
 import { Heading } from "@/components/heading";
@@ -60,9 +60,7 @@ const ConversationPage = () => {
   const onChatSubmit = async (data: any) => {
     setIsLoading(true);
     try {
-      const response = await axios.post("/api/chat", { message: data.message });
-      console.log("API Response: ", response.data); // Log the response to see its structure
-
+      // Add user message to state
       setMessages((prevMessages) => [
         ...prevMessages,
         { role: "user", content: data.message },
