@@ -42,20 +42,20 @@ Technologies Used
 
  Setup
 
-1. **Clone the repository**
+1. Clone the repository
     ```sh
     git clone https://github.com/yourusername/interactive-chatbot.git
     cd interactive-chatbot
     ```
 
-2. **Frontend Setup**
+2. Frontend Setup
     ```sh
     cd frontend
     npm install
     npm run dev
     ```
 
-3. **Backend Setup**
+3. Backend Setup
     ```sh
     cd backend
     python3 -m venv venv
