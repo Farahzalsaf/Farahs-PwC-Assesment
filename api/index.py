@@ -180,6 +180,7 @@ async def chat_stream(request: Request):
             chat_history.append(user_message)
             ai_message = AIMessage(content=best_response)
             chat_history.append(ai_message)
+
             yield {"data": json.dumps({"role": "bot", "content": best_response, "model": best_model})}
         except Exception as e:
             logger.error(f"Error in chat_stream: {e}", exc_info=True)

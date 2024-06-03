@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import * as z from "zod";
@@ -13,6 +14,7 @@ import { Loader } from "@/components/loader";
 interface Message {
   role: "user" | "bot";
   content: string;
+  model?: string; // Added model to track which model responded
 }
 
 const ConversationPage = () => {
@@ -77,7 +79,7 @@ const ConversationPage = () => {
         if (parsedData.role === "bot" && parsedData.content) {
           setMessages((prevMessages) => [
             ...prevMessages,
-            { role: "bot", content: parsedData.content },
+            { role: "bot", content: parsedData.content, model: parsedData.model }, // Include model info
           ]);
         }
       };
@@ -97,7 +99,7 @@ const ConversationPage = () => {
 
       setTimeout(() => {
         eventSource.close();
-      }, 30000); // Close SSE after 30 seconds
+      }, 3000); // Close SSE after 3 seconds
 
     } catch (error) {
       console.error("Error in chat: ", error);
@@ -179,7 +181,7 @@ const ConversationPage = () => {
                     : "bg-muted"
                 }`}
               >
-                <p>{message.role === "user" ? "User" : "Bot"}:</p>
+                <p>{message.role === "user" ? "User" : `Bot (Model: ${message.model})`}:</p>
                 <p className="text-sm">{message.content}</p>
               </div>
             ))}
