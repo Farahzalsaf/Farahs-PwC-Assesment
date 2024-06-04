@@ -25,6 +25,7 @@ Technologies Used
  Backend
 - FastAPI: A modern, fast (high-performance), web framework for building APIs with Python.
 - LangChain: A framework for developing applications powered by language models.
+- Chroma: A vector Database for storing and querying embeddings efficiently.
 - OpenAI API: An API for accessing OpenAI's GPT-3 and GPT-4 models.
 - Replicate API: An API for running machine learning models from different providers.
 - BeautifulSoup: A Python library for web scraping purposes to pull the data out of HTML and XML files.
