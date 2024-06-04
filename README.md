@@ -30,6 +30,17 @@ Technologies Used
 - Replicate API: An API for running machine learning models from different providers.
 - BeautifulSoup: A Python library for web scraping purposes to pull the data out of HTML and XML files.
 
+ Models Used for Comparison
+
+The application compares responses from the following four models to provide the best answer:
+
+1. GPT-3.5-turbo
+2. GPT-4
+3. Replicate Meta/LLaMA-2-70B-chat
+4. Replicate joehoover/Falcon-40B-instruct
+
+These models are evaluated based on the context extracted from the provided URLs, and the best response is selected for the user.
+
  Other Tools
 - SSE (Server-Sent Events): A server push technology enabling a client to receive automatic updates from a server via HTTP connection.
 - dotenv: A zero-dependency module that loads environment variables from a `.env` file into `process.env`.
