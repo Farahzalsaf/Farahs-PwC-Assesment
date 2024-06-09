@@ -13,16 +13,19 @@ const config = {
     colors: {
       dark: "#1b1b1b",
       light: "#fff",
-      accent: "#7B00D3",
-      accentDark: "#ffdb4d",
+      accent: "#0066CC", 
       gray: "#747474",
       grayDark: "#1b1b1b",
       grayLight: "#f5f5f5",
-      primary: "#7B00D3",
-      primaryDark: "#7B00D3",
-      secondary: "#ffdb4d",
-      green: "#00D3A3",
-    },
+      primary: "#FF6600", 
+      primaryDark: "#FF6600",
+      "primary-foreground": "#FFFFFF", 
+      secondary: "#FFD700", 
+      "secondary-foreground": "#000000",
+      destructive: "#FF0000",
+      "destructive-foreground": "#FFFFFF", 
+      background: "#F0F0F0",
+      input: "#CCCCCC",
     fontFamily: {
       mr: ["var(--font-mr)"],
       in: ["var(--font-in)"],
@@ -37,29 +40,27 @@ const config = {
     extend: {
       colors: {
         border: "hsl(var(--border))",
-        input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
-        background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
+          DEFAULT: "#FF6600", // PwC Orange
+          foreground: "#FFFFFF", // White
         },
         secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
+          DEFAULT: "#FFD700", // PwC Gold
+          foreground: "#000000", // Black
         },
         destructive: {
-          DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))",
+          DEFAULT: "#FF0000", // Red
+          foreground: "#FFFFFF", // White
         },
         muted: {
           DEFAULT: "hsl(var(--muted))",
           foreground: "hsl(var(--muted-foreground))",
         },
         accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
+          DEFAULT: "#0066CC", // PwC Blue
+          foreground: "#FFFFFF", // Adjust if needed
         },
         popover: {
           DEFAULT: "hsl(var(--popover))",
