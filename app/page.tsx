@@ -1,6 +1,5 @@
 "use client";
 import React, { useState } from "react";
-import axios from "axios";
 import * as z from "zod";
 import { Heading } from "@/components/heading";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -59,7 +58,7 @@ const ConversationPage = () => {
   };
 
   const onChatSubmit = async (data: any) => {
-    setIsLoading(true);
+    // setIsLoading(true); //TODO: fix this 
     try {
       // Add user message to state
       setMessages((prevMessages) => [
@@ -74,6 +73,7 @@ const ConversationPage = () => {
         const parsedData = JSON.parse(event.data);
         console.log("SSE Message:", parsedData); // Log SSE messages for debugging
         if (parsedData.role === "bot" && parsedData.content) {
+          setIsLoading(false);
           setMessages((prevMessages) => [
             ...prevMessages,
             { role: "bot", content: parsedData.content, model: parsedData.model },
@@ -89,19 +89,10 @@ const ConversationPage = () => {
       eventSource.onopen = () => {
         console.log("SSE connection opened");
       };
-
-      eventSource.onclose = () => {
-        console.log("SSE connection closed");
-      };
-
-      setTimeout(() => {
-        eventSource.close();
-      }, 30000); // Close SSE after 30 seconds
-
     } catch (error) {
       console.error("Error in chat: ", error);
+      setIsLoading(false);
     }
-    setIsLoading(false);
     chatForm.reset();
   };
 

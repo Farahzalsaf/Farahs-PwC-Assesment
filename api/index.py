@@ -1,5 +1,5 @@
 from fastapi import FastAPI, HTTPException, Request
-from typing import List, Dict, Any, Tuple
+from typing import Dict, Tuple
 from langchain_core.messages import AIMessage, HumanMessage
 from langchain_community.document_loaders import WebBaseLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
@@ -17,6 +17,7 @@ from openai import OpenAI
 from sse_starlette.sse import EventSourceResponse
 import json
 import replicate
+import time
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -48,12 +49,6 @@ class UrlModel(BaseModel):
 
 @app.post("/api/scrape")
 async def get_vectorstore_from_url(item: UrlModel):
-    """
-        Request Example:
-        {
-            "url": "https://www.example.com"
-        }
-    """
     url = item.url
     global vector_store
     logger.info(f"Received request to scrape URL: {url}")
@@ -90,6 +85,7 @@ class ChatRequest(BaseModel):
 
 @app.post("/api/chat")
 async def chat(request: ChatRequest):
+    time.sleep(120)
     global chat_history, vector_store
     if vector_store is None:
         raise HTTPException(status_code=404, detail="Vector store not found")
@@ -208,7 +204,7 @@ def call_replicate_model(model: str, prompt: str) -> str:
             output = replicateClient.run(
                 "meta/llama-2-70b-chat:02e509c789964a7ea8736978a43525956ef40397be9033abf9fd2badfe68c9e3",
                 input={"prompt": prompt}
-            )
+            ) 
             result = "".join([event for event in output])
             return result
         logger.error(f"Model {model} not found")
@@ -275,3 +271,4 @@ if __name__ == "__main__":
     import uvicorn
 
     uvicorn.run(app, host="0.0.0.0", port=8000)
+
