@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "farahspwcassesment"
+version = "0.1.0"
+description = ""
+authors = ["Farah Al Safwan <74122145+Farahzalsaf@users.noreply.github.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+beautifulsoup4 = "4.12.3"
+chromadb = "0.4.22"
+httptools = "0.6.1"
+langchain = "0.1.5"
+langchain-openai = "0.0.5"
+pip-chill = "1.0.3"
+replicate = "^0.28.0"
+sse-starlette = "^2.1.2"
+websockets = "12.0"
+watchfiles = "0.21.0"
+uvloop = "0.19.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
